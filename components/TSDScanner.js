@@ -6,7 +6,7 @@ import {
     Dimensions,
 } from 'react-native';
 import React from 'react';
-//import {RNCamera} from 'react-native-camera';
+import {RNCamera} from 'react-native-camera';
 
 export class TSDScanner extends React.Component {
 
