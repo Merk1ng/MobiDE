@@ -11,6 +11,7 @@ anim abc_slide_out_bottom
 anim abc_slide_out_top
 anim abc_tooltip_enter
 anim abc_tooltip_exit
+anim blink
 anim btn_checkbox_to_checked_box_inner_merged_animation
 anim btn_checkbox_to_checked_box_outer_merged_animation
 anim btn_checkbox_to_checked_icon_null_animation
@@ -194,6 +195,7 @@ attr buttonStyle
 attr buttonStyleSmall
 attr buttonTint
 attr buttonTintMode
+attr camera_id
 attr cardBackgroundColor
 attr cardCornerRadius
 attr cardElevation
@@ -599,6 +601,7 @@ attr showDividers
 attr showMotionSpec
 attr showText
 attr showTitle
+attr show_fps
 attr shrinkMotionSpec
 attr singleChoiceItemLayout
 attr singleLine
@@ -1516,13 +1519,16 @@ id adjust_width
 id alertTitle
 id all
 id always
+id any
 id async
 id auto
 id autofill_inline_suggestion_end_icon
 id autofill_inline_suggestion_start_icon
 id autofill_inline_suggestion_subtitle
 id autofill_inline_suggestion_title
+id back
 id beginning
+id blink_view
 id blocking
 id bottom
 id buttonPanel
@@ -1588,12 +1594,14 @@ id focusCrop
 id forever
 id fps_text
 id fragment_container_view_tag
+id front
 id ghost_view
 id ghost_view_holder
 id group_divider
 id hideable
 id home
 id homeAsUp
+id hud
 id icon
 id icon_group
 id icon_only
@@ -1684,6 +1692,7 @@ id rounded
 id save_non_transition_alpha
 id save_overlay_view
 id scale
+id scannedAnimation
 id screen
 id scroll
 id scrollIndicatorDown
@@ -1724,6 +1733,7 @@ id start
 id stretch
 id submenuarrow
 id submit_area
+id surfaceView
 id tabMode
 id tag_accessibility_actions
 id tag_accessibility_clickable_spans
@@ -1776,6 +1786,7 @@ id view_tree_saved_state_registry_owner
 id view_tree_view_model_store_owner
 id visible
 id visible_removing_fragment_view_tag
+id wait_spinner
 id wide
 id withText
 id wrap_content
@@ -1842,6 +1853,7 @@ layout abc_search_dropdown_item_icons_2line
 layout abc_search_view
 layout abc_select_dialog_material
 layout abc_tooltip
+layout activity_open_note_scanner
 layout autofill_inline_suggestion
 layout custom_dialog
 layout design_bottom_navigation_item
@@ -2802,6 +2814,7 @@ styleable BottomAppBar backgroundTint elevation fabAlignmentMode fabAnimationMod
 styleable BottomNavigationView backgroundTint elevation itemBackground itemHorizontalTranslationEnabled itemIconSize itemIconTint itemRippleColor itemTextAppearanceActive itemTextAppearanceInactive itemTextColor labelVisibilityMode menu
 styleable BottomSheetBehavior_Layout android_elevation backgroundTint behavior_expandedOffset behavior_fitToContents behavior_halfExpandedRatio behavior_hideable behavior_peekHeight behavior_saveFlags behavior_skipCollapsed shapeAppearance shapeAppearanceOverlay
 styleable ButtonBarLayout allowStacking
+styleable CameraBridgeViewBase camera_id show_fps
 styleable Capability queryPatterns shortcutMatchRequired
 styleable CardView android_minWidth android_minHeight cardBackgroundColor cardCornerRadius cardElevation cardMaxElevation cardPreventCornerOverlap cardUseCompatPadding contentPadding contentPaddingBottom contentPaddingLeft contentPaddingRight contentPaddingTop
 styleable CheckedTextView android_checkMark checkMarkCompat checkMarkTint checkMarkTintMode

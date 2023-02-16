@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "com.mobid.app-mergeDebugResources-3:/values-hy/values-hy.xml",
+            "outputFile": "com.mobid.app-mergeDebugResources-31:/values-hy/values-hy.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\cns\\.gradle\\caches\\transforms-3\\57e3facbf92c5e79086c2c8ef717f3ef\\transformed\\core-1.7.0\\res\\values-hy\\values-hy.xml",
+                    "source": "/Users/miranshakh/.gradle/caches/transforms-3/57e3facbf92c5e79086c2c8ef717f3ef/transformed/core-1.7.0/res/values-hy/values-hy.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",
@@ -21,7 +21,7 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\cns\\.gradle\\caches\\transforms-3\\8b20f191842f254129d55e4527d7b586\\transformed\\jetified-play-services-basement-18.1.0\\res\\values-hy\\values.xml",
+                    "source": "/Users/miranshakh/.gradle/caches/transforms-3/8b20f191842f254129d55e4527d7b586/transformed/jetified-play-services-basement-18.1.0/res/values-hy/values.xml",
                     "from": {
                         "startLines": "4",
                         "startColumns": "0",
@@ -38,7 +38,7 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\cns\\.gradle\\caches\\transforms-3\\2d759e1b14870793e52adcbe04559763\\transformed\\jetified-play-services-base-18.0.1\\res\\values-hy\\values.xml",
+                    "source": "/Users/miranshakh/.gradle/caches/transforms-3/2d759e1b14870793e52adcbe04559763/transformed/jetified-play-services-base-18.0.1/res/values-hy/values.xml",
                     "from": {
                         "startLines": "4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20",
                         "startColumns": "0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
@@ -55,7 +55,7 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\cns\\.gradle\\caches\\transforms-3\\b5aafe16c84add24fc50a69bc28bd81a\\transformed\\appcompat-1.4.1\\res\\values-hy\\values-hy.xml",
+                    "source": "/Users/miranshakh/.gradle/caches/transforms-3/b5aafe16c84add24fc50a69bc28bd81a/transformed/appcompat-1.4.1/res/values-hy/values-hy.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
