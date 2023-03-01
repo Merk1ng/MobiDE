@@ -1,63 +1,69 @@
-import * as firebase from "@react-native-firebase/app";
-import {Alert, AsyncStorage} from "react-native";
+import {AsyncStorage} from 'react-native';
+import database from '@react-native-firebase/database';
 
 export default class DeamonUpdater {
-
-    static start() {
-        if (!global.user)
-            return;
-
-        switch (global.user.type) {
-            case 1:
-                return;
-            case 2:
-                return;
-            case 3:
-                return;
-        }
-
-        setTimeout(() => {
-            this.start();
-        }, 90000);
+  static start() {
+    if (!global.user) {
+      return;
     }
 
-    static retailExchange() {
-        this.setInternalOrders();
-        this.getInternalOrders();
+    switch (global.user.type) {
+      case 1:
+        return;
+      case 2:
+        return;
+      case 3:
+        return;
     }
 
-    static getInternalOrders() {
+    setTimeout(() => {
+      this.start();
+    }, 90000);
+  }
 
-        let promises = [];
-        global.storages.forEach(storage => {
-            promises.push(new Promise((resolve, reject) => {
-                firebase.database().ref('e/InternalOrders/_' + storage.guid.replace(/[^a-z0-9]/gi, '_')).on('value', (snapshot) => {
-                    resolve(snapshot.val());
-                });
-            }));
-        });
+  static retailExchange() {
+    this.setInternalOrders();
+    this.getInternalOrders();
+  }
 
-        let newArr = [];
-
-        Promise.all(promises).then(results => {
-            results.forEach(result => {
-                newArr = newArr.concat(result);
+  static getInternalOrders() {
+    let promises = [];
+    global.storages.forEach(storage => {
+      promises.push(
+        new Promise((resolve, reject) => {
+          database()
+            .ref(
+              'e/InternalOrders/_' + storage.guid.replace(/[^a-z0-9]/gi, '_'),
+            )
+            .on('value', snapshot => {
+              resolve(snapshot.val());
             });
-            if(!Array.isArray(newArr))
-                newArr = [];
-            global.internalOrders = newArr;
-            AsyncStorage.setItem('internalOrders', JSON.stringify(global.internalOrders));
-        })
+        }),
+      );
+    });
+
+    let newArr = [];
+
+    Promise.all(promises).then(results => {
+      results.forEach(result => {
+        newArr = newArr.concat(result);
+      });
+      if (!Array.isArray(newArr)) {
+        newArr = [];
+      }
+      global.internalOrders = newArr;
+      AsyncStorage.setItem(
+        'internalOrders',
+        JSON.stringify(global.internalOrders),
+      );
+    });
+  }
+
+  static setInternalOrders() {
+    let promises = [];
+
+    if (!Array.isArray(global.internalOrdersDraft)) {
+      return;
     }
-
-    static setInternalOrders() {
-
-        let promises = [];
-
-        if (!Array.isArray(global.internalOrdersDraft))
-            return;
-
-
-
-    }
+  }
 }

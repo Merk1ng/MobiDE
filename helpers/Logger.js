@@ -1,9 +1,10 @@
 import React from 'react';
-import * as firebase from "@react-native-firebase/app";
+import database from '@react-native-firebase/database';
 
 export default class Logger {
-
-    static log(info, lvl) {
-        firebase.database().ref('logs/' + global.user.name).push({t: new Date().toISOString(), i: info});
-    }
+  static log(info, lvl) {
+    database()
+      .ref('logs/' + global.user.name)
+      .push({t: new Date().toISOString(), i: info});
+  }
 }

@@ -48,9 +48,10 @@ const firebaseConfig = {
 console.disableYellowBox = true;
 firebase.initializeApp(firebaseConfig);
 
-import React from 'react';
+import React, {useContext} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
+import {GlobalContext, GlobalProvider} from './context';
 
 const Drawer = createDrawerNavigator();
 
@@ -59,7 +60,7 @@ const Stack = createStackNavigator();
 const FoodServiceStack = () => {
   return (
     <Stack.Navigator
-      initialRouteName="SurveyList"
+      initialRouteName="Home"
       screenOptions={{headerShown: false}}>
       <Stack.Screen name="Home" component={Home} />
       <Stack.Screen
@@ -70,9 +71,6 @@ const FoodServiceStack = () => {
         name="FoodServiceOrdersList"
         component={FoodServiceOrdersList}
       />
-      <Stack.Screen name="Uploading" component={FoodServiceOrdersList} />
-      <Stack.Screen name="Downloading" component={Downloading} />
-      <Stack.Screen name="LogOutButton" component={LogOutButton} />
     </Stack.Navigator>
   );
 };
@@ -80,14 +78,11 @@ const FoodServiceStack = () => {
 const TechnicStack = () => {
   return (
     <Stack.Navigator
-      initialRouteName="SurveyList"
+      initialRouteName="ServiceList"
       screenOptions={{headerShown: false}}>
       <Stack.Screen name="ServiceList" component={ServiceList} />
       <Stack.Screen name="ServiceDetails" component={ServiceDetails} />
       <Stack.Screen name="Reports" component={Reports} />
-      <Stack.Screen name="Uploading" component={FoodServiceOrdersList} />
-      <Stack.Screen name="Downloading" component={Downloading} />
-      <Stack.Screen name="LogOutButton" component={LogOutButton} />
     </Stack.Navigator>
   );
 };
@@ -95,25 +90,13 @@ const TechnicStack = () => {
 const RetailTechnicStack = () => {
   return (
     <Stack.Navigator
-      initialRouteName="SurveyList"
+      initialRouteName="RetailTechnicList"
       screenOptions={{headerShown: false}}>
       <Stack.Screen name="RetailTechnicList" component={RetailTechnicList} />
       <Stack.Screen
         name="RetailTechnicDetails"
         component={RetailTechnicDetails}
       />
-      <Stack.Screen name="Downloading" component={Downloading} />
-      <Stack.Screen name="LogOutButton" component={LogOutButton} />
-    </Stack.Navigator>
-  );
-};
-
-const AuthorizationStack = () => {
-  return (
-    <Stack.Navigator
-      initialRouteName="SurveyList"
-      screenOptions={{headerShown: false}}>
-      <Stack.Screen name="LoginScreen" component={LoginScreen} />
     </Stack.Navigator>
   );
 };
@@ -121,15 +104,13 @@ const AuthorizationStack = () => {
 const FranchiseStack = () => {
   return (
     <Stack.Navigator
-      initialRouteName="SurveyList"
+      initialRouteName="Calculations"
       screenOptions={{headerShown: false}}>
-      <Stack.Screen name="Home" component={Home} />
+      <Stack.Screen name="HomeScreen" component={Home} />
       <Stack.Screen name="Calculations" component={Calculations} />
       <Stack.Screen name="Tsd" component={Tsd} />
       <Stack.Screen name="News" component={News} />
       <Stack.Screen name="Education" component={Education} />
-      <Stack.Screen name="Downloading" component={Downloading} />
-      <Stack.Screen name="LogOutButton" component={LogOutButton} />
       <Stack.Screen name="FranchOrderDetails" component={FranchOrderDetails} />
     </Stack.Navigator>
   );
@@ -141,10 +122,7 @@ const WholesaleStack = () => {
       initialRouteName="SurveyList"
       screenOptions={{headerShown: false}}>
       <Stack.Screen name="SurveyList" component={SurveyList} />
-      <Stack.Screen name="SurveyDetails" component={SurveyDetails} />
-      <Stack.Screen name="Uploading" component={Uploading} />
-      <Stack.Screen name="Downloading" component={Downloading} />
-      <Stack.Screen name="LogOutButton" component={LogOutButton} />
+      <Stack.Screen name="DetailsScreen" component={SurveyDetails} />
     </Stack.Navigator>
   );
 };
@@ -155,60 +133,133 @@ const RetailStack = () => {
       initialRouteName="Main"
       screenOptions={{headerShown: false}}>
       <Stack.Screen name="Main" component={Main} />
+
       <Stack.Screen name="InternalOrdersList" component={InternalOrdersList} />
-      <Stack.Screen
-        name="InternalOrderDetails"
-        component={InternalOrderDetails}
-      />
+
       <Stack.Screen
         name="InternalOrderDetails"
         component={InternalOrderDetails}
       />
       <Stack.Screen name="ExternalOrdersList" component={ExternalOrdersList} />
-      <Stack.Screen
-        name="ExternalOrderDetails"
-        component={ExternalOrderDetails}
-      />
       <Stack.Screen name="PurchasesPTU" component={PurchasesPTU} />
       <Stack.Screen name="PurchaseDetailsPTU" component={PurchaseDetailsPTU} />
       <Stack.Screen name="PurchasesList" component={PurchasesList} />
       <Stack.Screen name="InventoryList" component={InventoryList} />
-      <Stack.Screen name="PurchaseDetails" component={PurchaseDetails} />
       <Stack.Screen name="InventoryDetails" component={InventoryDetails} />
       <Stack.Screen name="PriceTags" component={PriceTags} />
       <Stack.Screen name="TaskList" component={TaskList} />
-      <Stack.Screen name="Downloading" component={Downloading} />
-      <Stack.Screen name="Settings" component={Settings} />
-      <Stack.Screen name="LogOutButton" component={LogOutButton} />
     </Stack.Navigator>
+  );
+};
+
+const TabScreen = () => {
+  return (
+    <Drawer.Navigator
+      initialRouteName="Main"
+      drawerContentOptions={{
+        activeTintColor: '#e91e63',
+        itemStyle: {marginVertical: 5},
+        headerShown: false,
+      }}
+      screenOptions={{headerShown: false}}>
+      <Drawer.Screen
+        name="Main"
+        component={Main}
+        options={{title: 'Главная'}}
+      />
+      <Drawer.Screen
+        name="FoodServiceOrdersList"
+        component={FoodServiceOrdersList}
+        options={{title: 'Заказы на склад'}}
+      />
+      <Drawer.Screen
+        name="ExternalOrdersList"
+        component={ExternalOrdersList}
+        options={{title: 'Заказы поставщикам'}}
+      />
+      <Drawer.Screen
+        name="PurchasesPTU"
+        component={PurchasesPTU}
+        options={{title: 'ПТУ(Cклад)'}}
+      />
+      <Drawer.Screen
+        name="PurchaseList"
+        component={PurchasesList}
+        options={{title: 'ПТУ(Поставщики)'}}
+      />
+      <Drawer.Screen
+        name="InventoryList"
+        component={InventoryList}
+        options={{title: 'Инвентаризация'}}
+      />
+      <Drawer.Screen
+        name="PriceTags"
+        component={PriceTags}
+        options={{title: 'Ценники'}}
+      />
+      <Drawer.Screen
+        name="TaskList"
+        component={TaskList}
+        options={{title: 'Задачи'}}
+      />
+      <Drawer.Screen
+        name="Downloading"
+        component={Downloading}
+        options={{title: 'Загрузки'}}
+      />
+      <Drawer.Screen
+        name="Settings"
+        component={Settings}
+        options={{title: 'Настройки'}}
+      />
+      <Drawer.Screen
+        name="LogOutButton"
+        component={LogOutButton}
+        options={{title: 'Выйти'}}
+      />
+    </Drawer.Navigator>
+  );
+};
+
+const Navigation = () => {
+  const {user} = useContext(GlobalContext);
+  const screen = 'SplashScreen';
+  // user?.type ? 'TabScreen' : 'Login';
+
+  return (
+    <NavigationContainer>
+      <Stack.Navigator
+        initialRouteName={screen}
+        screenOptions={{headerShown: false}}>
+        <Stack.Screen name="TabScreen" component={TabScreen} />
+        <Stack.Screen name="LoginScreen" component={LoginScreen} />
+        <Stack.Screen name="SplashScreen" component={Splash} />
+        <Stack.Screen name="Uploading" component={Uploading} />
+        <Stack.Screen name="Downloading" component={Downloading} />
+        <Stack.Screen
+          name="InternalOrderDetails"
+          component={InternalOrderDetails}
+        />
+        <Stack.Screen
+          name="ExternalOrderDetails"
+          component={ExternalOrderDetails}
+        />
+        <Stack.Screen
+          name="PurchaseDetailsPTU"
+          component={PurchaseDetailsPTU}
+        />
+        <Stack.Screen name="PurchaseDetails" component={PurchaseDetails} />
+
+        <Stack.Screen name="InventoryDetails" component={InventoryDetails} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 };
 
 export const App = () => {
   return (
-    <NavigationContainer>
-      <Drawer.Navigator
-        drawerContentOptions={{
-          activeTintColor: '#e91e63',
-          itemStyle: {marginVertical: 5},
-        }}>
-        <Drawer.Screen name="WholesaleStack" component={WholesaleStack} />
-
-        <Drawer.Screen name="RetailStack" component={RetailStack} />
-
-        <Drawer.Screen name="FoodServiceStack" component={FoodServiceStack} />
-
-        <Drawer.Screen name="TechnicStack" component={TechnicStack} />
-        <Drawer.Screen
-          name="RetailTechnicStack"
-          component={RetailTechnicStack}
-        />
-        <Drawer.Screen
-          name="AuthorizationStack"
-          component={AuthorizationStack}
-        />
-        <Drawer.Screen name="FranchiseStack" component={FranchiseStack} />
-      </Drawer.Navigator>
-    </NavigationContainer>
+    <GlobalProvider>
+      <Navigation />
+    </GlobalProvider>
   );
 };

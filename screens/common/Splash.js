@@ -1,24 +1,28 @@
 import React, {Component} from 'react';
 import {StyleSheet, View, Text, Alert} from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
+import {GlobalContext} from '../../context';
 
 export class Splash extends Component {
   keys;
+  static contextType = GlobalContext;
 
   init() {
     switch (global.user.type) {
       case 1:
-        this.props.navigation.navigate('TechnicStack');
+        this.props.navigation.navigate('TabScreen', {screen: 'TechnicStack'});
         this.keys = ['goods', 'customers', 'reports'];
         break;
 
       case 2:
-        this.props.navigation.navigate('WholesaleStack');
+        this.props.navigation.navigate('TabScreen', {
+          screen: 'WholesaleStack',
+        });
         this.keys = ['customers', 'questions'];
         break;
 
       case 3:
-        this.props.navigation.navigate('RetailStack');
+        this.props.navigation.navigate('TabScreen', {screen: 'RetailStack'});
         this.keys = [
           'goods',
           'storages',
@@ -41,17 +45,21 @@ export class Splash extends Component {
         break;
 
       case 4:
-        this.props.navigation.navigate('RetailTechnicStack');
+        this.props.navigation.navigate('TabScreen', {
+          screen: 'RetailTechnicStack',
+        });
         this.keys = ['goods', 'customers', 'servicesList'];
         break;
 
       case 5:
-        this.props.navigation.navigate('FoodServiceStack');
+        this.props.navigation.navigate('TabScreen', {
+          screen: 'FoodServiceStack',
+        });
         this.keys = ['goods', 'organizations', 'storages'];
         break;
 
       case 6:
-        this.props.navigation.navigate('FranchiseStack');
+        this.props.navigation.navigate('TabScreen', {screen: 'FranchiseStack'});
         this.keys = ['barcodes', 'goods'];
         break;
     }
@@ -59,17 +67,23 @@ export class Splash extends Component {
     let promises = [];
     this.keys.forEach(key => {
       promises.push(AsyncStorage.getItem(key));
+      AsyncStorage.removeItem(key);
     });
 
     return Promise.all(promises);
   }
 
-  componentDidMount() {
+  constructor(props) {
+    super(props);
+    this.props.navigation.addListener('focus', () => this._willFocus());
+  }
+
+  _willFocus() {
     AsyncStorage.getItem('user').then(user => {
       global.user = JSON.parse(user);
 
       if (!user) {
-        this.props.navigation.navigate('AuthorizationStack');
+        this.props.navigation.navigate('LoginScreen');
         return;
       }
 
@@ -79,6 +93,7 @@ export class Splash extends Component {
             let d = JSON.parse(results[i]);
             global[key] = d ? d : [];
           });
+          console.log('test  1');
 
           let d = [];
 
@@ -87,6 +102,7 @@ export class Splash extends Component {
           });
 
           if (d.length === 0 || this.needUPD(global.user)) {
+            console.log('test 2');
             let newUser = JSON.parse(user);
             newUser.lastUPD = new Date().toISOString();
             AsyncStorage.setItem('user', JSON.stringify(newUser)).then(
@@ -94,6 +110,7 @@ export class Splash extends Component {
             );
             this.props.navigation.navigate('Downloading');
           }
+          console.log('test 3');
         })
         .catch(err => {
           Alert.alert('Не удалось загрузить данные', JSON.stringify(err));

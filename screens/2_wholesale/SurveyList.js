@@ -6,37 +6,38 @@ import DocumentList from '../../prototypes/DocumentList';
 import {FlatList, StyleSheet, View} from 'react-native';
 
 export class SurveyList extends DocumentList {
+  static navigationOptions = CommonFunctions.getNavigationOptions(
+    'Главная',
+    'home',
+  );
 
-    static navigationOptions = CommonFunctions.getNavigationOptions('Главная', 'home');
+  ASYNC_STORAGE_KEY = 'Documents';
+  TITLE = 'Опросы';
+  DOCUMENT_DETAILS_SCREEN = 'DetailsScreen';
 
-    ASYNC_STORAGE_KEY = 'Documents';
-    TITLE = 'Опросы';
-    DOCUMENT_DETAILS_SCREEN = 'DetailsScreen';
+  constructor(props) {
+    super(props);
+  }
 
-    constructor(props) {
-        super(props);
-    }
+  renderItem = rowData => {
+    let item = rowData.item;
 
-    renderItem = (rowData) => {
-
-        let item = rowData.item;
-
-        return (
-            <ListItem
-                key={item.id}
-                title={CommonFunctions.getStringDate(item.date)}
-                subtitle={item.partner.name}
-                onPress={this.onPressItem(item)}
-            />
-        );
-    };
+    return (
+      <ListItem
+        key={item.id}
+        title={CommonFunctions.getStringDate(item.date)}
+        subtitle={item.partner.name}
+        onPress={this.onPressItem(item)}
+      />
+    );
+  };
 }
 
 const styles = StyleSheet.create({
-    rightSubtitle: {
-        textAlign: 'left',
-        width: '100%',
-    },
+  rightSubtitle: {
+    textAlign: 'left',
+    width: '100%',
+  },
 });
 
 export default SurveyList;

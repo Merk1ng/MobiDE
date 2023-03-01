@@ -1706,14 +1706,29 @@
   resolved "https://registry.npmjs.org/@react-native-community/masked-view/-/masked-view-0.1.11.tgz"
   integrity sha512-rQfMIGSR/1r/SyN87+VD8xHHzDYeHaJq6elOSCAD+0iLagXkSI2pfA0LmSXP21uw5i3em7GkkRjfJ8wpqWXZNw==
 
-"@react-native-firebase/app@^17.1.0":
-  version "17.1.0"
-  resolved "https://registry.npmjs.org/@react-native-firebase/app/-/app-17.1.0.tgz"
-  integrity sha512-Q9uC2uO8kJd9vxs5PEAG/Ks9xPwvNA+eqF0iSlB4tLcdFhnB/tKE0cNuUDw0OmFnJpAkC2P/ir0e1nVGKwuPbw==
+"@react-native-firebase/app@^17.3.0":
+  version "17.3.0"
+  resolved "https://registry.yarnpkg.com/@react-native-firebase/app/-/app-17.3.0.tgz#f89b120dbf4bd9812028785a7d0485f1091bbb53"
+  integrity sha512-anQ4ITkoLgyAgRc8mX6Le2kc6nSNQEs4IWSYehxQU2hTNePqQdCq6XI2KgSo2sSgU3ZoS5YAEJgDFOBNB1U/lA==
   dependencies:
     "@expo/config-plugins" "^5.0.4"
     opencollective-postinstall "^2.0.1"
     superstruct "^0.6.2"
+
+"@react-native-firebase/database@^17.3.0":
+  version "17.3.0"
+  resolved "https://registry.yarnpkg.com/@react-native-firebase/database/-/database-17.3.0.tgz#15b73706fc891ba35beb0e2717b692fde107f06a"
+  integrity sha512-BeXEeNjD6xJPkzo/UcVMbbiTZB8EcwWvTJXoBz/BvkiXzMZN1NirbklIOsFDzA6UZLZY8z6bxv60H54cQGBIXA==
+
+"@react-native-firebase/storage@^17.3.1":
+  version "17.3.1"
+  resolved "https://registry.yarnpkg.com/@react-native-firebase/storage/-/storage-17.3.1.tgz#9716b0827c10a052a2642e6d74b77aeecaf30799"
+  integrity sha512-Kfz3OtLbaETXGFefDkSZbMMGym+eYbAoywqNxjFTyPbBTabyQAZ8dRXJUGLMDHhXxyhga4NMrJxB46roDClKIA==
+
+"@react-native-picker/picker@^2.4.8":
+  version "2.4.8"
+  resolved "https://registry.yarnpkg.com/@react-native-picker/picker/-/picker-2.4.8.tgz#a1a21f3d6ecadedbc3f0b691a444ddd7baa081f8"
+  integrity sha512-5NQ5XPo1B03YNqKFrV6h9L3CQaHlB80wd4ETHUEABRP2iLh7FHLVObX2GfziD+K/VJb8G4KZcZ23NFBFP1f7bg==
 
 "@react-native/assets@1.0.0":
   version "1.0.0"
@@ -2100,11 +2115,6 @@
   dependencies:
     "@typescript-eslint/types" "5.51.0"
     eslint-visitor-keys "^3.3.0"
-
-"@woonivers/react-native-document-scanner@^2.1.1":
-  version "2.1.1"
-  resolved "https://registry.npmjs.org/@woonivers/react-native-document-scanner/-/react-native-document-scanner-2.1.1.tgz"
-  integrity sha512-DJVRhEOtY8I8RzcG64mmFZqaoRqnpAOjeiI2gU5XnjyIuSkURp5YnfiH21i/fOx/xLPhIuf1MRvEWK1l74F9CQ==
 
 "@xmldom/xmldom@~0.7.0":
   version "0.7.9"
@@ -6375,6 +6385,11 @@ react-native-codegen@^0.71.3:
     jscodeshift "^0.13.1"
     nullthrows "^1.1.1"
 
+react-native-document-scanner-plugin@^0.7.3:
+  version "0.7.3"
+  resolved "https://registry.yarnpkg.com/react-native-document-scanner-plugin/-/react-native-document-scanner-plugin-0.7.3.tgz#a0212e687681e3b1ed9b4aebcb1e7fc20d52ab50"
+  integrity sha512-cddhp1rDK3nwCyi3qhbDsuWzC2svBgoGhHNQRgxJvrgfM4uoQKAGSU3XYY3VXjAZCzlqVZz9PYziYDD6fdEIcw==
+
 react-native-gesture-handler@^2.9.0:
   version "2.9.0"
   resolved "https://registry.yarnpkg.com/react-native-gesture-handler/-/react-native-gesture-handler-2.9.0.tgz#2f63812e523c646f25b9ad660fc6f75948e51241"
@@ -6480,6 +6495,11 @@ react-native-vector-icons@^9.2.0:
   dependencies:
     prop-types "^15.7.2"
     yargs "^16.1.1"
+
+react-native-vision-camera@^2.15.4:
+  version "2.15.4"
+  resolved "https://registry.yarnpkg.com/react-native-vision-camera/-/react-native-vision-camera-2.15.4.tgz#821f0505fc8c63b87c1ae4697d2bb4f670333576"
+  integrity sha512-SJXSWH1pu4V3Kj4UuX/vSgOxc9d5wb5+nHqBHd+5iUtVyVLEp0F6Jbbaha7tDoU+kUBwonhlwr2o8oV6NZ7Ibg==
 
 react-native@0.71.2:
   version "0.71.2"
@@ -7614,6 +7634,11 @@ vary@~1.1.2:
   version "1.1.2"
   resolved "https://registry.npmjs.org/vary/-/vary-1.1.2.tgz"
   integrity sha512-BNGbWLfd0eUPabhkXUVm0j8uuvREyTh5ovRa/dyow/BqAbZJyC+5fU+IzQOzmAKzYqYRAISoRhdQr3eIZ/PXqg==
+
+vision-camera-code-scanner@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/vision-camera-code-scanner/-/vision-camera-code-scanner-0.2.0.tgz#8adc0694319a17f6a95f6dfacc02ab7ac29b4742"
+  integrity sha512-H5hVkXfbIcGdg9YlhuS8Y/xDX5e32Vo6eK5FyDQsE9AGVjlqEHMmSLHZg7BX8UUm4ADmiAZc8wzc4n8TUqGr0g==
 
 vlq@^1.0.0:
   version "1.0.1"

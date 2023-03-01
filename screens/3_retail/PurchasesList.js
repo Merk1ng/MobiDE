@@ -1,85 +1,115 @@
 'use strict';
 
 import React from 'react';
-import {Text, View, FlatList, StyleSheet} from 'react-native';
+import {
+  Text,
+  View,
+  FlatList,
+  StyleSheet,
+  TouchableHighlight,
+  ActivityIndicator,
+} from 'react-native';
 import CommonFunctions from '../../helpers/CommonFunctions';
 import {ListItem} from '@rneui/themed';
 import MobidServer1C from '../../helpers/MobidServer1C';
 import DocumentList from '../../prototypes/DocumentList';
 
 export class PurchasesList extends DocumentList {
+  static navigationOptions = CommonFunctions.getNavigationOptions(
+    'ПТУ(Поставщики)',
+    'shopping-cart',
+    'font-awesome',
+  );
 
-    static navigationOptions = CommonFunctions.getNavigationOptions('ПТУ(Поставщики)', 'shopping-cart', 'font-awesome');
-
-    ASYNC_STORAGE_KEY = 'DocumentsP';
-    TITLE = 'ПТУ(Поставщики)';
-    DOCUMENT_DETAILS_SCREEN = 'PurchaseDetails';
-
-    _willFocus() {
-
-        CommonFunctions.stack = null;
-
-        let params = {
-            UserCode: global.user.name,
-            UserKey: global.user.key
-        };
-
-        MobidServer1C.fetch('GetPurchasesExternalSuppliers', params)// Поставщики
-            .then((data) => {
-                this.setState({list: data});
-            })
-            .catch((error) => {
-                reject(error.toString());
-            });
-    }
-
-    render() {
-        return (
-            <View style={_styles.container}>
-
-                {this.getHeader()}
-
-                <FlatList
-                    data={this.state.list}
-                    renderItem={this.renderItem}
-                    keyExtractor={this.keyExtractor}
-                />
-
-                {this.getDialogFilter()}
-
-            </View>
-        );
-    }
-
-    renderItem = rowData => {
-
-        if (!rowData.item) {
-            return (
-                <Text>Нет данных</Text>
-            );
-        }
-
-        return (
-            <ListItem
-                pad={20}
-                badge={{
-                    value: rowData.item.items.length,
-                    textStyle: {color: 'white'},
-                    containerStyle: {width: 30},
-                }}
-                key={rowData.item.id}
-                title={CommonFunctions.getStringDate(rowData.item.date)}
-                subtitle={rowData.item.supplier ? rowData.item.supplier.name : ''}
-                rightSubtitle={rowData.item.automatic ? 'Aвто' : ''}
-                onPress={this.onPressItem(rowData.item)}
-            />
-        );
+  ASYNC_STORAGE_KEY = 'DocumentsP';
+  TITLE = 'ПТУ(Поставщики)';
+  DOCUMENT_DETAILS_SCREEN = 'PurchaseDetails';
+  constructor(props) {
+    super(props);
+    this.state = {
+      loading: false,
     };
+  }
+
+  _willFocus() {
+    CommonFunctions.stack = null;
+    this.setState({loading: true});
+
+    let params = {
+      UserCode: global.user.name,
+      UserKey: global.user.key,
+    };
+
+    MobidServer1C.fetch('GetPurchasesExternalSuppliers', params) // Поставщики
+      .then(data => {
+        this.setState({list: data, loading: false});
+      })
+      .catch(error => {
+        console.log(error.toString());
+      });
+  }
+
+  render() {
+    return (
+      <View style={_styles.container}>
+        {this.getHeader()}
+
+        {this.state.loading ? (
+          <ActivityIndicator color="#000000" />
+        ) : (
+          <FlatList
+            data={this.state.list}
+            renderItem={this.renderItem}
+            keyExtractor={this.keyExtractor}
+          />
+        )}
+
+        {this.getDialogFilter()}
+      </View>
+    );
+  }
+
+  renderItem = rowData => {
+    if (!rowData.item) {
+      return <Text>Нет данных</Text>;
+    }
+
+    return (
+      <ListItem
+        Component={TouchableHighlight}
+        badge={{
+          value: rowData.item.items.length,
+          textStyle: {color: 'white'},
+          containerStyle: {width: 30},
+        }}
+        onPress={() => {
+          this.props.navigation.navigate(this.DOCUMENT_DETAILS_SCREEN, {
+            document: rowData.item,
+          });
+        }}
+        pad={20}
+        key={rowData.item.id}>
+        <ListItem.Content>
+          <ListItem.Title>
+            {CommonFunctions.getStringDate(rowData.item.date)}
+          </ListItem.Title>
+
+          <ListItem.Subtitle>
+            {rowData.item.supplier ? rowData.item.supplier.name : ''}
+          </ListItem.Subtitle>
+
+          <ListItem.Subtitle right>
+            {rowData.item.automatic ? 'Aвто' : ''}
+          </ListItem.Subtitle>
+        </ListItem.Content>
+      </ListItem>
+    );
+  };
 }
 const _styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#F5FCFF',
-    },
+  container: {
+    flex: 1,
+    backgroundColor: '#F5FCFF',
+  },
 });
 export default PurchasesList;

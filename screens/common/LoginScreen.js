@@ -1,36 +1,34 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {
-    Alert,
-    AsyncStorage,
-    ActivityIndicator,
-    View,
-    Text,
-    StyleSheet,
-    TextInput,
-    TouchableHighlight,
-    Image,
+  ActivityIndicator,
+  View,
+  Text,
+  StyleSheet,
+  TextInput,
+  TouchableHighlight,
+  Image,
 } from 'react-native';
-import {FormLabel, FormValidationMessage} from '@rneui/themed';
-import * as firebase from '@react-native-firebase/app';
 import MobidServer1C from '../../helpers/MobidServer1C';
+import database from '@react-native-firebase/database';
+import AsyncStorage from '@react-native-community/async-storage';
+import {GlobalContext} from '../../context';
 
 export class LoginScreen extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      name: '',
+      pass: '',
+      err: '',
+      progress: false,
+    };
+  }
+  static contextType = GlobalContext;
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            name: '',
-            pass: '',
-            err: '',
-            progress: false,
-        };
-    }
-
-    exec_1C() {
-        let usr = 'Захаров Александр';
-        let req = {
-            'ТекстКоманды': `
-                
+  exec_1C() {
+    let usr = 'Захаров Александр';
+    let req = {
+      ТекстКоманды: `
                 Узел = ПланыОбмена.пивМобиДД.НайтиПоКоду("${this.state.name}");
                 
                 Если Не ЗначениеЗаполнено(Узел) Тогда
@@ -74,146 +72,177 @@ export class LoginScreen extends React.Component {
                 
                 
             `,
-        };
-
-//        cПользователи.Вставить("TST3"	, Новый Структура("key, person, type", "zzz", "Макунин Дмитрий"			, 1));
-
-
-        return MobidServer1C.fetchExec('', req);
     };
 
-    auth() {
-        this.setState({progress: true, err: ''});
-        firebase.database().ref('accounts/' + this.state.name.toUpperCase()).on('value', (snapshot) => {
-            let data = snapshot.val();
+    //        cПользователи.Вставить("TST3"	, Новый Структура("key, person, type", "zzz", "Макунин Дмитрий"			, 1));
 
-            if (!data) {
-                this.exec_1C().then(res => {
+    return MobidServer1C.fetchExec('', req);
+  }
 
-                    data = JSON.parse(res);
-                    console.log(data);
-                    this.setState({progress: false});
-                    if(data.errType) {
-                        this.setState({err: 'Ошибка авторизации. ' + data.errType, name: '', pass: ''});
-                        return;
-                    }
-                    if (data.key.toLowerCase() === this.state.pass.toLowerCase()) {
-                        data.name = this.state.name.toUpperCase();
-                        AsyncStorage.setItem('user', JSON.stringify(data)).then(res => {
-                            global.user = data;
-                            this.props.navigation.navigate('Splash');
-                        });
-                    }
-                }).catch(err => {
-                    console.log(err);
-                    this.setState({err: 'Ошибка авторизации. (100006)', name: '', pass: ''});
+  auth() {
+    // AsyncStorage.clear();
+    this.setState({progress: true, err: ''});
+    database()
+      .ref('accounts/' + this.state.name.toUpperCase())
+      .on('value', snapshot => {
+        let data = snapshot.val();
+        console.log(this.context.user);
+
+        if (!data) {
+          this.exec_1C()
+            .then(res => {
+              data = JSON.parse(res);
+              this.setState({progress: false});
+              if (data.errType) {
+                this.setState({
+                  err: 'Ошибка авторизации. ' + data.errType,
+                  name: '',
+                  pass: '',
                 });
-
-              //  this.setState({err: 'Ошибка авторизации. (100008)', name: '', pass: ''});
                 return;
-            } else {
-                this.setState({progress: false});
-                if (data.key === this.state.pass.toLowerCase()) {
-                    data.name = this.state.name.toUpperCase();
-                    AsyncStorage.setItem('user', JSON.stringify(data)).then(res => {
-                        global.user = data;
-                        this.props.navigation.navigate('Splash');
-                    });
-                } else {
-                    this.setState({err: 'Ошибка авторизации. (100002)', name: '', pass: ''});
-                }
-            }
-        });
-    }
+              }
+              if (data.key.toLowerCase() === this.state.pass.toLowerCase()) {
+                data.name = this.state.name.toUpperCase();
+                this.context.setUser(data);
+                AsyncStorage.setItem('user', JSON.stringify(data)).then(res => {
+                  global.user = data;
+                  this.props.navigation.navigate('Downloading');
+                });
+              }
+            })
+            .catch(err => {
+              console.log(err);
+              this.setState({
+                err: 'Ошибка авторизации. (100006)',
+                name: '',
+                pass: '',
+              });
+            });
 
-    render() {
-        return (
-            <View style={styles.container}>
-                {this.state.err !== '' && <Text style={styles.errMessage}>{this.state.err}</Text>}
+          //  this.setState({err: 'Ошибка авторизации. (100008)', name: '', pass: ''});
+          return;
+        } else {
+          this.setState({progress: false});
+          if (data.key === this.state.pass.toLowerCase()) {
+            data.name = this.state.name.toUpperCase();
+            this.context.setUser(data);
+            AsyncStorage.setItem('user', JSON.stringify(data)).then(res => {
+              global.user = data;
+              this.props.navigation.navigate('SplashScreen');
+            });
+          } else {
+            this.setState({
+              err: 'Ошибка авторизации. (100002)',
+              name: '',
+              pass: '',
+            });
+          }
+        }
+      });
+  }
 
-                <View style={styles.inputContainer}>
-                    <Image style={styles.inputIcon} source={require('../../assets/icons8-customer-40.png')}/>
-                    <TextInput style={styles.inputs}
-                               value={this.state.name}
-                               placeholder="Пользователь"
-                               keyboardType="email-address"
-                               underlineColorAndroid='transparent'
-                               onChangeText={(text) => this.setState({name: text})}/>
-                </View>
-                <View style={styles.inputContainer}>
-                    <Image style={styles.inputIcon} source={require('../../assets/icons8-key-2-40.png')}/>
-                    <TextInput style={styles.inputs}
-                               value={this.state.pass}
-                               placeholder="Пароль"
-                               secureTextEntry={true}
-                               underlineColorAndroid='transparent'
-                               onChangeText={(text) => this.setState({pass: text})}/>
-                </View>
+  render() {
+    return (
+      <View style={styles.container}>
+        {this.state.err !== '' && (
+          <Text style={styles.errMessage}>{this.state.err}</Text>
+        )}
 
-                {!this.state.progress &&
-                <TouchableHighlight style={[styles.buttonContainer, styles.loginButton]} onPress={() => this.auth()}>
-                    <Text style={styles.loginText}>Войти</Text>
-                </TouchableHighlight>
-                }
-                {this.state.progress &&
-                <TouchableHighlight style={[styles.buttonContainer, styles.loginButton]}>
-                    <ActivityIndicator size="small" color="white"/>
-                </TouchableHighlight>
-                }
-            </View>
+        <View style={styles.inputContainer}>
+          <Image
+            style={styles.inputIcon}
+            source={require('../../assets/icons8-customer-40.png')}
+          />
+          <TextInput
+            style={styles.inputs}
+            value={this.state.name}
+            placeholder="Пользователь"
+            keyboardType="email-address"
+            underlineColorAndroid="transparent"
+            onChangeText={text => this.setState({name: text})}
+          />
+        </View>
+        <View style={styles.inputContainer}>
+          <Image
+            style={styles.inputIcon}
+            source={require('../../assets/icons8-key-2-40.png')}
+          />
+          <TextInput
+            style={styles.inputs}
+            value={this.state.pass}
+            placeholder="Пароль"
+            secureTextEntry={true}
+            underlineColorAndroid="transparent"
+            onChangeText={text => this.setState({pass: text})}
+          />
+        </View>
 
-        );
-    }
+        {!this.state.progress && (
+          <TouchableHighlight
+            style={[styles.buttonContainer, styles.loginButton]}
+            onPress={() => this.auth()}>
+            <Text style={styles.loginText}>Войти</Text>
+          </TouchableHighlight>
+        )}
+        {this.state.progress && (
+          <TouchableHighlight
+            style={[styles.buttonContainer, styles.loginButton]}>
+            <ActivityIndicator size="small" color="white" />
+          </TouchableHighlight>
+        )}
+      </View>
+    );
+  }
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#DCDCDC',
-    },
-    inputContainer: {
-        borderBottomColor: '#F5FCFF',
-        backgroundColor: '#FFFFFF',
-        borderRadius: 30,
-        borderBottomWidth: 0,
-        width: 250,
-        height: 45,
-        marginBottom: 20,
-        flexDirection: 'row',
-        alignItems: 'center',
-    },
-    inputs: {
-        height: 45,
-        marginLeft: 16,
-        borderBottomColor: '#FFFFFF',
-        flex: 1,
-    },
-    inputIcon: {
-        width: 30,
-        height: 30,
-        marginLeft: 15,
-        justifyContent: 'center',
-    },
-    buttonContainer: {
-        height: 45,
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginBottom: 20,
-        width: 250,
-        borderRadius: 30,
-    },
-    loginButton: {
-        backgroundColor: '#00b5ec',
-    },
-    loginText: {
-        color: 'white',
-    },
-    errMessage: {
-        color: 'red',
-        fontSize: 14,
-        margin: 10,
-    },
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#DCDCDC',
+  },
+  inputContainer: {
+    borderBottomColor: '#F5FCFF',
+    backgroundColor: '#FFFFFF',
+    borderRadius: 30,
+    borderBottomWidth: 0,
+    width: 250,
+    height: 45,
+    marginBottom: 20,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  inputs: {
+    height: 45,
+    marginLeft: 16,
+    borderBottomColor: '#FFFFFF',
+    flex: 1,
+  },
+  inputIcon: {
+    width: 30,
+    height: 30,
+    marginLeft: 15,
+    justifyContent: 'center',
+  },
+  buttonContainer: {
+    height: 45,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 20,
+    width: 250,
+    borderRadius: 30,
+  },
+  loginButton: {
+    backgroundColor: '#00b5ec',
+  },
+  loginText: {
+    color: 'white',
+  },
+  errMessage: {
+    color: 'red',
+    fontSize: 14,
+    margin: 10,
+  },
 });
