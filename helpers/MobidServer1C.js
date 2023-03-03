@@ -12,9 +12,13 @@ export default class MobidServer1C {
   static username = 'MobiD загрузка';
   static password = '{S?Ok1pu';
   // static url = 'https://1c.pivzavoz.ru/pivzavoz_last/ru_RU/ ';
-  static url = 'https://1c.pivzavoz.ru/pivzavoz_new/hs/pivMobiDD/V1/';
+  // static url = 'https://1c.pivzavoz.ru/pivzavoz_new/hs/pivMobiDD/V1/';
+  // static urlExec =
+  //   'https://1c.pivzavoz.ru/pivzavoz_new/hs/pivHTTP/1S_ExecutorParam/';
+  // static ok;
+  static url = 'https://1c.pivzavoz.ru/pivzavoz_last/hs/pivMobiDD/V1/';
   static urlExec =
-    'https://1c.pivzavoz.ru/pivzavoz_new/hs/pivHTTP/1S_ExecutorParam/';
+    'https://1c.pivzavoz.ru/pivzavoz_last/hs/pivHTTP/1S_ExecutorParam/';
   static ok;
 
   // static username = 'Регламент';
@@ -47,9 +51,9 @@ export default class MobidServer1C {
         })
         .then(text => {
           if (this.ok) {
-            result(JSON.parse(text));
+            result(JSON.parse(text || '{}'));
           } else {
-            reject(JSON.parse(text));
+            reject(JSON.parse(text || '{}'));
           }
         })
         .catch(err => {

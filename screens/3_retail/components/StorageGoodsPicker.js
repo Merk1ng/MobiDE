@@ -260,6 +260,7 @@ export class StorageGoodsPicker extends React.Component {
 
   renderGoodItem = rowData => {
     let item = rowData.item;
+
     return (
       <TouchableOpacity
         style={{flexDirection: 'row'}}
@@ -281,9 +282,10 @@ export class StorageGoodsPicker extends React.Component {
             quantity: item.quantity,
           });
         }}>
-        <Text numberOfLines={2} style={styles.item}>
+        <Text numberOfLines={1} style={styles.item}>
           {item.name}
         </Text>
+
         <Text style={styles.itemC}>
           {item.quantity} ш.{item.price} р.
         </Text>

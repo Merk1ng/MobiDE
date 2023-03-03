@@ -28,9 +28,10 @@ export class ExternalOrdersList extends DocumentList {
     super(props);
     this.state = {
       dialog_filter: false,
-      list: global.internalOrdersDraft.concat(global.internalOrders),
+      list: global.internalOrdersDraft?.concat(global.internalOrders),
       loading: false,
     };
+    this.props.navigation.addListener('focus', () => this._willFocus());
   }
   onPressItem = item => () => {
     this.props.navigation.navigate(this.DOCUMENT_DETAILS_SCREEN, {
@@ -49,6 +50,7 @@ export class ExternalOrdersList extends DocumentList {
 
     MobidServer1C.fetch('GetExternalOrdersNoReceipts', params)
       .then(data => {
+        console.log('data', data);
         this.setState({list: data, loading: false});
       })
       .catch(error => {
@@ -108,13 +110,21 @@ export class ExternalOrdersList extends DocumentList {
             {item.supplier ? item.supplier.name : ''}
           </ListItem.Subtitle>
 
-          <ListItem.Subtitle right style={{color: 'red'}}>
-            {item.delay
-              ? 'Просрочен!' +
+          {item.DeliveryArrived && item.delay ? (
+            <ListItem.Subtitle right style={{color: 'green'}}>
+              {'Поставка пришла!' +
                 '\n' +
-                DeliveriesDate.getStringDateddMMMM(item.DateDelay)
-              : ''}
-          </ListItem.Subtitle>
+                DeliveriesDate.getStringDateddMMMM(item.DeliveryArrived)}
+            </ListItem.Subtitle>
+          ) : null}
+
+          {item.DateDelay && item.delay ? (
+            <ListItem.Subtitle right style={{color: 'red'}}>
+              {'Просрочен!' +
+                '\n' +
+                DeliveriesDate.getStringDateddMMMM(item.DateDelay)}
+            </ListItem.Subtitle>
+          ) : null}
         </ListItem.Content>
       </ListItem>
     );

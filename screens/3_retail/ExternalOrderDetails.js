@@ -327,7 +327,7 @@ export class ExternalOrderDetails extends DocumentDetails {
       })
       .catch(error => {
         console.log(error);
-        Alert.alert('', 'Успешно выполнено');
+        Alert.alert('', 'Ошибка');
       });
   }
 
@@ -341,11 +341,9 @@ export class ExternalOrderDetails extends DocumentDetails {
     console.log(data);
     MobidServer1C.fetch('DeliveryArrived', data)
       .then(result => {
-        console.log(result);
         Alert.alert('', 'Успешно выполнено');
       })
       .catch(error => {
-        console.log(error);
         Alert.alert('', 'Ошибка');
       });
   }

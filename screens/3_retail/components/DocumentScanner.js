@@ -1,15 +1,7 @@
 import React from 'react';
-import {
-  View,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  Image,
-  Modal,
-} from 'react-native';
-import {Icon} from '@rneui/themed';
-import DocScanner from 'react-native-document-scanner-plugin';
+import {StyleSheet, Modal} from 'react-native';
 import storage from '@react-native-firebase/storage';
+import CameraScan from './CameraScan';
 
 export default class DocumentScanner extends React.Component {
   // pdfScannerElement = useRef(null);
@@ -112,24 +104,6 @@ export default class DocumentScanner extends React.Component {
     this.setState({torch: !this.state.torch});
   };
 
-  scanDocument = async () => {
-    // start the document scanner
-    const {scannedImages} = await DocScanner.scanDocument({
-      maxNumDocuments: 1,
-    });
-
-    // get back an array with scanned image file paths
-    if (scannedImages.length > 0) {
-      this.handleOnPressOK(scannedImages[0]);
-      // set the img src, so we can view the first scanned image
-      this.setState({data: {croppedImage: scannedImages[0]}});
-    }
-  };
-
-  componentDidMount() {
-    this.scanDocument();
-  }
-
   render() {
     console.log('state', this.state.data);
     return (
@@ -138,40 +112,11 @@ export default class DocumentScanner extends React.Component {
         transparent={false}
         visible={this.props.modalVisible}
         onRequestClose={this.props.close}>
-        <React.Fragment>
-          <Image
-            style={{width: '100%', height: '50%'}}
-            source={{uri: this.state.data?.croppedImage}}
-          />
-
-          <Text style={styles.tipText}>1. Наведите камеру на документ</Text>
-          <Text style={styles.tipText}>
-            2. Дождитесь, когда сканер определит границы документа
-          </Text>
-          <View style={styles.btnTorch}>
-            <TouchableOpacity
-              onPress={this.handleOnFlashSwitch}
-              style={styles.buttonTorch}>
-              <Icon name={'flash-on'} size={52} />
-            </TouchableOpacity>
-          </View>
-        </React.Fragment>
+        <CameraScan handleOnPressOK={this.handleOnPressOK} />
       </Modal>
     );
   }
 }
-
-/*
-* <TouchableOpacity
-                            onPress={this.handleOnPress}
-                            style={styles.button}>
-
-                            <Text style={styles.buttonText}>
-                                Сканировать
-                            </Text>
-
-                        </TouchableOpacity>
-* */
 
 const styles = StyleSheet.create({
   scanner: {
